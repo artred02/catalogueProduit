@@ -9,5 +9,6 @@
 </h1>
 <br/>
 <a href="catalogue">Catalogue</a>
+<a href="allproducts">allProducts</a>
 </body>
 </html>

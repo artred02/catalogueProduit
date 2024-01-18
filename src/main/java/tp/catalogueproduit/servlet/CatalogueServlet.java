@@ -41,7 +41,11 @@ public class CatalogueServlet extends HttpServlet {
         String dispo = request.getParameter("dispo");
         String description = request.getParameter("description");
 
-        new ProductEntity(name, Float.parseFloat(price), Boolean.parseBoolean(dispo), description);
+        try {
+            new ProductEntity(name, Float.parseFloat(price), Boolean.parseBoolean(dispo), description);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void destroy() {

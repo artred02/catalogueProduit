@@ -1,14 +1,15 @@
 package tp.catalogueproduit.entities;
 
 import jakarta.persistence.*;
+import tp.catalogueproduit.database.ConnectionDatabase;
 
 import java.io.Serializable;
+import java.sql.*;
 
 @Entity
 @Table (name="product")
 public class ProductEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(name="name", length = 100)
@@ -23,11 +24,19 @@ public class ProductEntity implements Serializable {
     @Column(name="description", length = 100)
     private String description;
 
-    public ProductEntity(String name, Float price, Boolean dispo, String description) {
+    public ProductEntity(String name, Float price, Boolean dispo, String description) throws Exception {
         this.name = name;
         this.price = price;
         this.dispo = dispo;
         this.description = description;
+
+        Connection conn = new ConnectionDatabase().getConnection();
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO product (name, price, dispo, description) VALUES (?, ?, ?, ?)");
+        ps.setString(1, name);
+        ps.setFloat(2, price);
+        ps.setBoolean(3, dispo);
+        ps.setString(4, description);
+        ps.executeUpdate();
     }
 
     public ProductEntity() {}
