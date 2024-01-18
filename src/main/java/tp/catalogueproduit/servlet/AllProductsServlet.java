@@ -38,7 +38,7 @@ public class AllProductsServlet extends HttpServlet {
                 out.println("<td>" + rs.getInt("id") + "</td>");
                 out.println("<td>" + rs.getString("name") + "</td>");
                 out.println("<td>" + rs.getFloat("price") + "</td>");
-                out.println("<td>" + rs.getBoolean("dispo") + "</td>");
+                out.println("<td>" + rs.getInt("dispo") + "</td>");
                 out.println("<td>" + rs.getString("description") + "</td>");
                 out.println("</tr>");
             }

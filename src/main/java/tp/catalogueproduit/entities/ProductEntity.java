@@ -19,7 +19,7 @@ public class ProductEntity implements Serializable {
     private Float price;
 
     @Column(name="dispo")
-    private Boolean dispo;
+    private int dispo;
 
     @Column(name="description", length = 100)
     private String description;
@@ -27,14 +27,15 @@ public class ProductEntity implements Serializable {
     public ProductEntity(String name, Float price, Boolean dispo, String description) throws Exception {
         this.name = name;
         this.price = price;
-        this.dispo = dispo;
+        if(dispo) this.dispo = 1;
+        else this.dispo = 0;
         this.description = description;
 
         Connection conn = new ConnectionDatabase().getConnection();
         PreparedStatement ps = conn.prepareStatement("INSERT INTO product (name, price, dispo, description) VALUES (?, ?, ?, ?)");
         ps.setString(1, name);
         ps.setFloat(2, price);
-        ps.setBoolean(3, dispo);
+        ps.setInt(3, this.dispo);
         ps.setString(4, description);
         ps.executeUpdate();
     }
@@ -65,11 +66,11 @@ public class ProductEntity implements Serializable {
         this.price = price;
     }
 
-    public Boolean getDispo() {
+    public int getDispo() {
         return dispo;
     }
 
-    public void setDispo(Boolean dispo) {
+    public void setDispo(int dispo) {
         this.dispo = dispo;
     }
 

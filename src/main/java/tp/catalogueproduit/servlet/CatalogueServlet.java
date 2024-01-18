@@ -38,11 +38,14 @@ public class CatalogueServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("name");
         String price = request.getParameter("price");
-        String dispo = request.getParameter("dispo");
+        boolean dispo = request.getParameter("dispo") != null;
         String description = request.getParameter("description");
 
+
         try {
-            new ProductEntity(name, Float.parseFloat(price), Boolean.parseBoolean(dispo), description);
+            new ProductEntity(name, Float.parseFloat(price), dispo, description);
+            // redirection vers la page produits
+            response.sendRedirect("allproducts");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
