@@ -1,5 +1,6 @@
 package tp.catalogueproduit.servlet;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,9 @@ import tp.catalogueproduit.entities.ProductEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @WebServlet(name = "allproducts", value = "/allproducts")
 public class AllProductsServlet extends HttpServlet {
@@ -20,42 +24,39 @@ public class AllProductsServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // get all products
-
         ConnectionDatabase connectionDatabase = new ConnectionDatabase();
         Connection conn = connectionDatabase.getConnection();
 
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
-        out.println("<table><tr><th>id</th><th>name</th><th>price</th><th>dispo</th><th>description</th><th>delete</th></tr>");
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM product");
+            PreparedStatement ps = conn.prepareStatement("SELECT id FROM product WHERE 1");
             ResultSet rs = ps.executeQuery();
-            while(rs.next())
-            {
-                out.println("<tr>");
-                out.println("<td>" + rs.getInt("id") + "</td>");
-                out.println("<td>" + rs.getString("name") + "</td>");
-                out.println("<td>" + rs.getFloat("price") + "</td>");
-                out.println("<td>" + rs.getInt("dispo") + "</td>");
-                out.println("<td>" + rs.getString("description") + "</td>");
-                out.println("<td><form action='allproducts' method='post'><input type='hidden' name='id' value='"+ rs.getInt("id") +"'><input type='submit' value='Delete'></form></td>");
-                out.println("</tr>");
+
+            List<ProductEntity> products = new ArrayList<>();
+            while(rs.next()) {
+                ProductEntity productEntity = new ProductEntity();
+                productEntity.GetProductById(rs.getInt("id"));
+                products.add(productEntity);
             }
-        } catch (SQLException e) {
+
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/templates/allProducts.jsp");
+            try {
+                request.setAttribute("products", products);
+                rd.forward(request, response);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        out.println("</table>");
-
-        out.println("</body></html>");
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
         out.println("<h1>" + request.getParameter("id") + "</h1>");
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.DeleteProductEntity(Integer.parseInt(request.getParameter("id")));
+        response.sendRedirect("allproducts");
     }
 
     public void Faitrien(){}

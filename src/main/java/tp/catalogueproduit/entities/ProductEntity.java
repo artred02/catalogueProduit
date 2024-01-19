@@ -6,50 +6,77 @@ import tp.catalogueproduit.database.ConnectionDatabase;
 import java.io.Serializable;
 import java.sql.*;
 
-@Entity
-@Table (name="product")
 public class ProductEntity implements Serializable {
     @Id
     private int id;
 
-    @Column(name="name", length = 100)
     private String name;
 
-    @Column(name="price")
     private Float price;
 
-    @Column(name="dispo")
-    private int dispo;
+    private Boolean dispo;
 
-    @Column(name="description", length = 100)
     private String description;
 
     public ProductEntity(String name, Float price, Boolean dispo, String description) throws Exception {
         this.name = name;
         this.price = price;
-        if(dispo) this.dispo = 1;
-        else this.dispo = 0;
+        this.dispo = dispo;
         this.description = description;
+        this.insertProduct();
+    }
 
+    // Load a product
+    public void GetProductById(int id) throws Exception {
+        Connection conn = new ConnectionDatabase().getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM product WHERE id = ?");
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next())
+        {
+            this.id = rs.getInt("id");
+            this.name = rs.getString("name");
+            this.price = rs.getFloat("price");
+            this.dispo = rs.getBoolean("dispo");
+            this.description = rs.getString("description");
+        }
+        else
+        {
+            throw new Exception("Product not found");
+        }
+    }
+
+    public void insertProduct() throws Exception {
         Connection conn = new ConnectionDatabase().getConnection();
         PreparedStatement ps = conn.prepareStatement("INSERT INTO product (name, price, dispo, description) VALUES (?, ?, ?, ?)");
-        ps.setString(1, name);
-        ps.setFloat(2, price);
-        ps.setInt(3, this.dispo);
-        ps.setString(4, description);
+        ps.setString(1, this.name);
+        ps.setFloat(2, this.price);
+        ps.setBoolean(3, this.dispo);
+        ps.setString(4, this.description);
         ps.executeUpdate();
     }
 
     public void DeleteProductEntity(int id)
     {
         Connection conn = new ConnectionDatabase().getConnection();
-        PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("DELETE * FROM product where id = ? ");
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM product WHERE id = ?");
             ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void updateProduct() throws Exception {
+        Connection conn = new ConnectionDatabase().getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE product SET name = ?, price = ?, dispo = ?, description = ? WHERE id = ?");
+        ps.setString(1, this.name);
+        ps.setFloat(2, this.price);
+        ps.setBoolean(3, this.dispo);
+        ps.setString(4, this.description);
+        ps.setInt(5, this.id);
+        ps.executeUpdate();
     }
 
     public ProductEntity() {}
@@ -78,11 +105,11 @@ public class ProductEntity implements Serializable {
         this.price = price;
     }
 
-    public int getDispo() {
+    public Boolean getDispo() {
         return dispo;
     }
 
-    public void setDispo(int dispo) {
+    public void setDispo(Boolean dispo) {
         this.dispo = dispo;
     }
 
