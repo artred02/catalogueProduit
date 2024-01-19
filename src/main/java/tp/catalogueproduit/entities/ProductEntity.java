@@ -40,6 +40,18 @@ public class ProductEntity implements Serializable {
         ps.executeUpdate();
     }
 
+    public void DeleteProductEntity(int id)
+    {
+        Connection conn = new ConnectionDatabase().getConnection();
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("DELETE * FROM product where id = ? ");
+            ps.setInt(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ProductEntity() {}
 
     public void setId(int id) {

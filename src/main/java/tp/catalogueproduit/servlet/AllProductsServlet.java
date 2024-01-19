@@ -28,7 +28,7 @@ public class AllProductsServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
         out.println("<h1>" + message + "</h1>");
-        out.println("<table><tr><th>id</th><th>name</th><th>price</th><th>dispo</th><th>description</th></tr>");
+        out.println("<table><tr><th>id</th><th>name</th><th>price</th><th>dispo</th><th>description</th><th>delete</th></tr>");
         try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM product");
             ResultSet rs = ps.executeQuery();
@@ -40,6 +40,7 @@ public class AllProductsServlet extends HttpServlet {
                 out.println("<td>" + rs.getFloat("price") + "</td>");
                 out.println("<td>" + rs.getInt("dispo") + "</td>");
                 out.println("<td>" + rs.getString("description") + "</td>");
+                out.println("<td><form action='allproducts' method='post'><input type='hidden' name='id' value='"+ rs.getInt("id") +"'><input type='submit' value='Delete'></form></td>");
                 out.println("</tr>");
             }
         } catch (SQLException e) {
@@ -52,7 +53,12 @@ public class AllProductsServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println("<h1>" + request.getParameter("id") + "</h1>");
     }
+
+    public void Faitrien(){}
 
     public void destroy() {
     }
