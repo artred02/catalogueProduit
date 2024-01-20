@@ -5,6 +5,8 @@ import tp.catalogueproduit.database.ConnectionDatabase;
 
 import java.io.Serializable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductEntity implements Serializable {
     @Id
@@ -78,6 +80,43 @@ public class ProductEntity implements Serializable {
         ps.setInt(5, this.id);
         ps.executeUpdate();
     }
+
+    public void GetProductByName(String name) throws Exception {
+        Connection conn = new ConnectionDatabase().getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM product WHERE name = ?");
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+
+
+        if(rs.next())
+        {
+            this.id = rs.getInt("id");
+            this.name = rs.getString("name");
+            this.price = rs.getFloat("price");
+            this.dispo = rs.getBoolean("dispo");
+            this.description = rs.getString("description");
+        }
+        else
+        {
+            throw new Exception("Product not found");
+        }
+    }
+
+    public List<ProductEntity> GetListProductByName(String name) throws Exception {
+        Connection conn = new ConnectionDatabase().getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM product WHERE name = ?");
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+
+        List<ProductEntity> products = new ArrayList<>();
+        while(rs.next()) {
+            ProductEntity productEntity = new ProductEntity();
+            productEntity.GetProductById(rs.getInt("id"));
+            products.add(productEntity);
+        }
+        return products;
+    }
+
 
     public ProductEntity() {}
 

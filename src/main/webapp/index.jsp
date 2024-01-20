@@ -9,6 +9,9 @@
 </h1>
 <br/>
 <a href="catalogue">Catalogue</a>
+<p> </p>
 <a href="allproducts">allProducts</a>
+<p> ICI JE VEUX METTRE LA FONCTION RECHERCHE NON?</p>
+<a href="searchproduct"> Search for a product </a>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <%@ page import="tp.catalogueproduit.entities.ProductEntity" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.io.PrintWriter" %>
 <%--
   Created by IntelliJ IDEA.
   User: cleme
@@ -15,7 +16,7 @@
     <title>Title</title>
 </head>
 <body>
-<h1>hello world</h1>
+<h1> The products  </h1>
 
 <% List<ProductEntity> products = (List<ProductEntity>) request.getAttribute("products"); %>
 

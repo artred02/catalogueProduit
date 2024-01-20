@@ -38,6 +38,7 @@ public class ModifyProduct extends HttpServlet {
         try {
             ProductEntity productEntity = new ProductEntity();
             productEntity.GetProductById(Integer.parseInt(request.getParameter("id")));
+
             productEntity.setName(request.getParameter("name"));
             productEntity.setPrice(Float.parseFloat(request.getParameter("price")));
             productEntity.setDispo(request.getParameter("dispo") != null);
