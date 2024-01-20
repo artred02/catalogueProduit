@@ -10,16 +10,24 @@
 <html>
 <head>
     <title>Search the product</title>
+    <jsp:include page="header.jsp"/>
 </head>
 <body>
-<h3> what are u searching for ? </h3>
-<% ProductEntity produit = (ProductEntity) request.getAttribute("product"); %>
-    <h1>Search for product</h1>
-    <form action="searchproduct" method="post">
-        <label for="name">Product name :</label>
-        <input type="text" id="name" name="nameProduct" placeholder="Enter the product name" required>
+<%--    <form action="searchproduct" method="post">--%>
+<%--        <label for="name">Product name :</label>--%>
+<%--        <input type="text" id="name" name="nameProduct" placeholder="Enter the product name" required>--%>
+<%--        <input type="submit" value="Search">--%>
+<%--    </form>--%>
+
+    <%-- same form with bootstrap --%>
+    <form action="searchproduct" method="post" style="max-width: 300px">
+        <div class="form-group">
+            <h4><label for="name">Product name :</label></h4>
+            <input type="text" class="form-control" id="name" name="nameProduct" placeholder="Enter the product name" required>
+        </div>
         <br>
-        <input type="submit" value="Search">
+        <button type="submit" class="btn btn-primary">Search</button>
     </form>
+
 </body>
 </html>

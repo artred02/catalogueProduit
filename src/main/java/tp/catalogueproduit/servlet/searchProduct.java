@@ -16,20 +16,10 @@ import java.util.List;
 
 @WebServlet(name = "searchproduct", value = "/searchproduct")
 public class searchProduct extends HttpServlet {
-    private String message;
-
-    public void init() {
-        message = "search product";
-    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ConnectionDatabase connectionDatabase = new ConnectionDatabase();
-        Connection conn = connectionDatabase.getConnection();
 
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT id FROM product WHERE 1");
-            ResultSet rs = ps.executeQuery();
-
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/templates/searchProduct.jsp");
             rd.forward(request, response);
 
@@ -44,28 +34,28 @@ public class searchProduct extends HttpServlet {
             ProductEntity productEntity = new ProductEntity();
             String productName = request.getParameter("nameProduct");
             PrintWriter out = response.getWriter();
-            List<ProductEntity> products = new ArrayList<>();
 
-            products = productEntity.GetListProductByName(productName);
+            List<ProductEntity> products = productEntity.GetListProductByName(productName);
 
             if(products.isEmpty()){
                 out.println("<html><body>");
                 out.println("<h2> PRODUCT NOT FOUND !!!!!!! </h2>");
                 out.println("</html></body>");
-            }
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/templates/allProducts.jsp");
-            try {
-                request.setAttribute("products", products);
-                rd.forward(request, response);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } else {
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/templates/allProducts.jsp");
+                try {
+                    request.setAttribute("products", products);
+                    rd.forward(request, response);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
-            } catch (Exception e) {
-               // response.sendRedirect("searchproduct");
-                throw new RuntimeException(e);
-              }
+        } catch (Exception e) {
+           // response.sendRedirect("searchproduct");
+            throw new RuntimeException(e);
         }
+    }
 
     public void destroy() {
     }

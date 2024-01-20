@@ -2,16 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="css/style.css">
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="catalogue">Catalogue</a>
-<p> </p>
-<a href="allproducts">allProducts</a>
-<p> ICI JE VEUX METTRE LA FONCTION RECHERCHE NON?</p>
-<a href="searchproduct"> Search for a product </a>
+<jsp:include page="WEB-INF/templates/header.jsp"/>
+<h1>Catalogue des produits</h1>
 </body>
 </html>

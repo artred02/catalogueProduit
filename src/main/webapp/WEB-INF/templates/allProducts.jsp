@@ -16,11 +16,12 @@
     <title>Title</title>
 </head>
 <body>
+<jsp:include page="header.jsp"/>
 <h1> The products  </h1>
 
 <% List<ProductEntity> products = (List<ProductEntity>) request.getAttribute("products"); %>
 
-<table>
+<table class="table table-bordered">
     <tr>
         <th>id</th>
         <th>name</th>
@@ -43,13 +44,13 @@
         <td>
             <form action="modifyProduct" method="get" style="display: contents">
                 <input type="hidden" value="<%= product.getId() %>" name="id">
-                <input type="submit" value="Modifier">
+                <input type="submit" value="Modifier" class="btn btn-warning">
             </form>
         </td>
         <td>
             <form action="allproducts" method="post" style="display: contents">
                 <input type="hidden" value="<%= product.getId() %>" name="id">
-                <input type="submit" value="Supprimer">
+                <input type="submit" value="Supprimer" class="btn btn-danger">
             </form>
         </td>
     </tr>
